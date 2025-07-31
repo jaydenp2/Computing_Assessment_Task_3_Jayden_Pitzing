@@ -4,19 +4,17 @@
 
 ## Project Description
 
-> **A web forum where people can talk about their social media addictions.**  
-> This is a safe space to find and give help to those who may have strong addictions to different aspects of social media, e.g. short form content.
+> **A web page with resources and articles where people can find out informationabout social media addictions.**  
+> This is a safe space for users to use this site to reduce their addiction to certain social medias. This site can track the time that they spend on each social media that the user uses and provides tips based on on how much time they are spending on the social media.
 
 ---
 
 ## Functional Requirements
 
 - **Users can create accounts and log in securely.**
-- **Users can post messages in discussion threads.**
-- **Users can reply to and like other users' posts.**
 - **Users can search for topics and filter posts by category.**
 - **Users can access a resource section with articles and tips.**
-- **Users can join topic-specific groups.**
+- **Users can track the time spend on social media apps.**
 
 ---
 
