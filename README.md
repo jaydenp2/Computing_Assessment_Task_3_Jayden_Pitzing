@@ -4,7 +4,7 @@
 
 ## Project Description
 
-> **A web page with resources and articles where people can find out informationabout social media addictions.**  
+> **A web page with resources and articles where people can find out information and solutions to social media addictions.**  
 > This is a safe space for users to use this site to reduce their addiction to certain social medias. This site can track the time that they spend on each social media that the user uses and provides tips based on on how much time they are spending on the social media.
 
 ---
