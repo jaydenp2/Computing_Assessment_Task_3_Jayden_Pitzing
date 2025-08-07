@@ -24,3 +24,9 @@
 - The interface should be **responsive**.
 - Content must be **backed up daily** to prevent data loss.
 - The design of the forum should be **simple and intuitive** with a simple colour scheme.
+
+---
+
+## Project Task 2
+
+<img src="20250807_230342.jpg" alt="Wireframing Task 2">
