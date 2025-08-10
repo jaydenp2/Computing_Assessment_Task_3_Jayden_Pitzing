@@ -28,5 +28,7 @@
 ---
 
 ## Project Task 2
-
 <img src="20250807_230342.jpg" alt="Wireframing Task 2">
+
+## Project Task 3
+<img src="Computing Project Task 3.jpg" alt="Wireframing Task 3">
