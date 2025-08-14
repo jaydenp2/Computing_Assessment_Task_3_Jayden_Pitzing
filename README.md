@@ -1,33 +1,34 @@
+
 # COMPUTING ASSESSMENT TASK 3 — JAYDEN PITZING
 
 ---
 
-## 1. Project Description
+## Project Description
 
-> **A web page with resources and articles where people can find out information and solutions to social media addictions.**  
-> This is a safe space for users to use this site to reduce their addiction to certain social medias. This site can track the time that they spend on each social media that the user uses and provides tips based on how much time they are spending on the social media.
-
----
-
-## 2. Functional Requirements
-
-- **Users can create accounts and log in securely.**
-- **Users can search for topics and filter posts by category.**
-- **Users can access a resource section with articles and tips.**
-- **Users can track the time spent on social media apps.**
+> **A web page with resources and articles to help users find information and solutions for social media addictions.**  
+> This site is a safe space for users to reduce their addiction to social media. It tracks time spent on each platform and provides tips based on usage.
 
 ---
 
-## 3. Non-Functional Requirements
+## Functional Requirements
+
+- Users can create accounts and log in securely.
+- Users can search for topics and filter posts by category.
+- Users can access a resource section with articles and tips.
+- Users can track the time spent on social media apps.
+
+---
+
+## Non-Functional Requirements
 
 - The forum should load within **5 seconds** on most devices.
 - The interface should be **responsive**.
 - Content must be **backed up daily** to prevent data loss.
-- The design of the forum should be **simple and intuitive** with a simple colour scheme.
+- The design should be **simple and intuitive** with a clean colour scheme.
 
 ---
 
-# PROJECT TASK 2
+# Project Task 2
 
 ![Wireframing Task 2](Images/20250807_230342.jpg)
 
@@ -68,7 +69,7 @@
 
 ---
 
-# PROJECT TASK 3
+# Project Task 3
 
 ![Wireframing Task 3](Images/Computing_Project_Task_3.jpg)
 
@@ -103,3 +104,18 @@
 | Icons          | Line icons with 2px stroke         | Feather Icons (SVG)                    |
 | Photographs    | Natural light, muted backgrounds   | Unsplash (JPG/WebP, optimised to 80%)  |
 | UI Patterns    | Subtle shadows, rounded corners    | Built-in CSS variables, reusable components |
+
+---
+
+# Project Task 4
+
+![Algorithm, signup, signin](Images/image.png)
+
+---
+
+## Test Cases
+
+| **Test Case ID** | **Scenario**                                      | **Preconditions**                                 | **Steps**                                                                                                                                                                                                 | **Expected Result**                                                                                                                                                                                                 | **Priority**      |
+|:----------------:|:--------------------------------------------------|:--------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------:|
+| TC‑01            | New user sign‑up and activation success           | No existing account for the email                 | 1. Open Sign Up.<br>2. Enter valid name, unique email, strong password.<br>3. Submit.<br>4. Open activation email and click link within expiry.                                                          | - Account created as Pending.<br>- Activation email sent.<br>- Token validates.<br>- Status becomes Active.<br>- Session created.<br>- Redirected to Dashboard.<br>- Message: "Account activated and logged in."     | **Medium** 🟨|
+| TC‑02            | Existing user login fail, then password reset success | Account exists, status Active; user doesn’t remember password | 1. Open Login.<br>2. Enter correct email, wrong password.<br>3. See error.<br>4. Click “Forgot Password?”.<br>5. Submit email.<br>6. Click reset link within expiry.<br>7. Enter strong new password and submit. | - Initial login rejected.<br>- Reset email sent.<br>- Token validates.<br>- Password updated.<br>- Failed_attempts reset.<br>- Session created.<br>- Redirected to Dashboard.<br>- Message: "Password updated."      | **Medium** 🟨|
