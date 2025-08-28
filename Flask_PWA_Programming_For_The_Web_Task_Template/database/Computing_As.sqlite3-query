@@ -1,0 +1,30 @@
+-- database: c:\Users\jayde\Computing_Assessment_Task_3_Jayden_Pitzing\database\data_source.db
+
+-- Show all users from User_Database
+SELECT * FROM User_Database;
+
+-- Show all time tracking records from User_Time
+SELECT * FROM User_Time;
+
+-- Insert a new user into User_Database
+INSERT INTO User_Database (User_ID, First_name, Surname, Email, Account_Password)
+VALUES ('101', 'Bob', 'Jones', 'bob.jones@email.com', 'securepass456');
+
+-- Insert a new time record for a user into User_Time
+INSERT INTO User_Time (User_ID, Instagram_Time, Snapchat_Time, Youtube_Time, Facebook_Time, Twitter_Time, Tiktok_Time)
+VALUES ('101', 45, 30, 60, 20, 15, 50);
+
+-- Get all users and their total time spent on social media (sum all platform columns)
+SELECT 
+    u.User_ID, 
+    u.First_name, 
+    u.Surname,
+    COALESCE(t.Instagram_Time, 0) +
+    COALESCE(t.Snapchat_Time, 0) +
+    COALESCE(t.Youtube_Time, 0) +
+    COALESCE(t.Facebook_Time, 0) +
+    COALESCE(t.Twitter_Time, 0) +
+    COALESCE(t.Tiktok_Time, 0) AS total_minutes
+FROM User_Database u
+LEFT JOIN User_Time t ON u.User_ID = t.User_ID
+GROUP BY u.User_ID;
