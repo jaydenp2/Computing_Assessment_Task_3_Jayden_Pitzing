@@ -41,3 +41,41 @@ def validate_user(email, password):
     if password_row and password_row[0] == password:
         return True
     return False
+
+def create_user(full_name, email, password):
+    conn = sql.connect('database/data_source.db')
+    cursor = conn.cursor()
+    # Split full name
+    parts = full_name.strip().split(' ', 1)
+    first_name = parts[0]
+    surname = parts[1] if len(parts) > 1 else ''
+    # Get next User_ID
+    cursor.execute("SELECT MAX(User_ID) FROM User_Database")
+    max_id = cursor.fetchone()[0]
+    if max_id is None:
+        next_id = 1
+    else:
+        next_id = int(max_id) + 1
+    # Insert into User_Database
+    cursor.execute(
+        "INSERT INTO User_Database (User_ID, First_Name, Surname, Email, Account_Password) VALUES (?, ?, ?, ?, ?)",
+        (next_id, first_name, surname, email, password)
+    )
+    # Insert into User_Time
+    cursor.execute(
+        "INSERT INTO User_Time (User_ID) VALUES (?)",
+        (next_id,)
+    )
+    conn.commit()
+    conn.close()
+    return next_id
+
+def get_user_by_email(email):
+    conn = sql.connect('database/data_source.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT First_Name, Surname, Email FROM User_Database WHERE Email = ?", (email,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return {'First_Name': row[0], 'Surname': row[1], 'Email': row[2]}
+    return None

@@ -222,6 +222,78 @@
             font-size: 1rem;
             line-height: 1.5;
         }
+        /* Modal styles */
+        #auth-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 2000;
+        }
+        #auth-modal {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2100;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+            width: 350px;
+            max-width: 95vw;
+        }
+        #auth-modal .modal-content {
+            padding: 2rem;
+        }
+        #auth-modal h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        #auth-modal label {
+            margin-top: 1rem;
+            display: block;
+            font-weight: 500;
+        }
+        #auth-modal input {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.3rem;
+            border-radius: 8px;
+            border: 1px solid #d1fae5;
+        }
+        #auth-modal button[type="submit"] {
+            width: 100%;
+            padding: 0.7rem;
+            background: #14b8a6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        #auth-modal .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        #auth-modal .tab-buttons button {
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #auth-modal .tab-buttons #tab-signin {
+            background: #14b8a6;
+            color: #fff;
+        }
+        #auth-modal .tab-buttons #tab-signup {
+            background: #e0fdf4;
+            color: #14b8a6;
+        }
     </style>
 </head>
 <body>
@@ -236,7 +308,16 @@
             <a href="/time-management">Time Management</a>
         </div>
         <div class="navbar-signin">
-            <button onclick="window.location.href='/login'">Sign In</button>
+            {% if user_name %}
+                <span style="color:#14b8a6; font-size:1rem;">
+                    Welcome, <span style="font-weight:500; text-decoration:underline;">{{ user_name }}</span>
+                </span>
+                <span style="display:inline-block; vertical-align:middle; margin-left:8px; border:1px solid #14b8a6; border-radius:50%; padding:2px;">
+                    <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+                </span>
+            {% else %}
+                <button onclick="showAuthModal()">Sign In</button>
+            {% endif %}
         </div>
     </nav>
     <div class="container">
@@ -298,5 +379,94 @@
             </div>
         </section>
     </div>
+
+    <!-- Modal Overlay and Auth Modal -->
+    <div id="auth-modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:2000;"></div>
+    <div id="auth-modal" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2100; background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.18); width:350px; max-width:95vw;">
+        <div style="padding:2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 style="font-size:1.2rem; font-weight:600;">Welcome to MindfulConnect</h2>
+                <button onclick="closeAuthModal()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <div style="margin-top:1.5rem;">
+                <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:1rem;">
+                    <button id="tab-signin" onclick="showTab('signin')" style="padding:0.5rem 1.2rem; border-radius:8px; border:none; background:#14b8a6; color:#fff; font-weight:500; cursor:pointer;">Sign In</button>
+                    <button id="tab-signup" onclick="showTab('signup')" style="padding:0.5rem 1.2rem; border-radius:8px; border:none; background:#e0fdf4; color:#14b8a6; font-weight:500; cursor:pointer;">Sign Up</button>
+                </div>
+                <!-- Sign In Form -->
+                <form id="form-signin" method="POST" action="/login" style="display:block;">
+                    <div style="margin-bottom:1rem;">
+                        <label>Email</label>
+                        <input type="email" name="email" required style="width:100%;padding:0.6rem;margin-top:0.3rem;border-radius:8px;border:1px solid #d1fae5;">
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                        <label>Password</label>
+                        <input type="password" name="password" required style="width:100%;padding:0.6rem;margin-top:0.3rem;border-radius:8px;border:1px solid #d1fae5;">
+                    </div>
+                    <button type="submit" style="width:100%;padding:0.7rem;background:#14b8a6;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Sign In</button>
+                </form>
+                <!-- Sign Up Form -->
+                <form id="form-signup" method="POST" action="/signup" style="display:none;">
+                    <div style="margin-bottom:1rem;">
+                        <label>Full Name</label>
+                        <input type="text" name="name" required style="width:100%;padding:0.6rem;margin-top:0.3rem;border-radius:8px;border:1px solid #d1fae5;">
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                        <label>Email</label>
+                        <input type="email" name="email" required style="width:100%;padding:0.6rem;margin-top:0.3rem;border-radius:8px;border:1px solid #d1fae5;">
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                        <label>Password</label>
+                        <input type="password" name="password" required style="width:100%;padding:0.6rem;margin-top:0.3rem;border-radius:8px;border:1px solid #d1fae5;">
+                    </div>
+                    <button type="submit" style="width:100%;padding:0.7rem;background:#14b8a6;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Sign Up</button>
+                </form>
+            </div>
+            <div id="auth-error-msg" style="display:none; color:#ef4444; text-align:center; margin-bottom:1rem; font-size:1rem;"></div>
+        </div>
+    </div>
+    <script>
+        // Show modal when Sign In button is clicked
+        document.querySelector('.navbar-signin button').onclick = function(event) {
+            event.preventDefault();
+            document.getElementById('auth-modal-overlay').style.display = 'block';
+            document.getElementById('auth-modal').style.display = 'block';
+            showTab('signin');
+        };
+        // Close modal
+        function closeAuthModal() {
+            document.getElementById('auth-modal-overlay').style.display = 'none';
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+        // Switch tabs
+        function showTab(tab) {
+            document.getElementById('form-signin').style.display = tab === 'signin' ? 'block' : 'none';
+            document.getElementById('form-signup').style.display = tab === 'signup' ? 'block' : 'none';
+            document.getElementById('tab-signin').style.background = tab === 'signin' ? '#14b8a6' : '#e0fdf4';
+            document.getElementById('tab-signin').style.color = tab === 'signin' ? '#fff' : '#14b8a6';
+            document.getElementById('tab-signup').style.background = tab === 'signup' ? '#14b8a6' : '#e0fdf4';
+            document.getElementById('tab-signup').style.color = tab === 'signup' ? '#fff' : '#14b8a6';
+        }
+        // Close modal when clicking outside
+        document.getElementById('auth-modal-overlay').onclick = closeAuthModal;
+
+        function showAuthModal() {
+            document.getElementById('auth-modal-overlay').style.display = 'block';
+            document.getElementById('auth-modal').style.display = 'block';
+            showTab('signin');
+        }
+        // Show modal if login failed or requested from backend
+        {% if show_auth_modal %}
+        window.onload = function() {
+            document.getElementById('auth-modal-overlay').style.display = 'block';
+            document.getElementById('auth-modal').style.display = 'block';
+            showTab('signin');
+            {% if auth_error %}
+            document.getElementById('auth-error-msg').innerText = "{{ auth_error }}";
+            document.getElementById('auth-error-msg').style.display = 'block';
+            {% endif %}
+        };
+        {% endif %}
+    </script>
 </body>
 </html>
