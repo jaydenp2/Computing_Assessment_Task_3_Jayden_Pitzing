@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resources - MindfulConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* --- Resource Page Styles --- */
+        .resources-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .resources-header .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #d1fae5;
+            color: #14b8a6;
+            padding: 0.5rem 1.2rem;
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .resources-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .resources-header p {
+            color: #334155;
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .resources-search-filter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            justify-content: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .resources-search-filter input {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid #d1fae5;
+            font-size: 1rem;
+            background: #f8fafc;
+        }
+        .resources-search-filter select {
+            padding: 0.9rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid #d1fae5;
+            font-size: 1rem;
+            background: #f8fafc;
+        }
+        .resources-search-filter button {
+            background: #14b8a6;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 0.9rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .resources-search-filter button:hover {
+            background: #0d9488;
+        }
+        .all-resources-section {
+            margin-bottom: 2.5rem;
+        }
+        .all-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            /* Move heading to the left, align with cards */
+            justify-content: flex-start;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 0.5rem;
+        }
+        .all-articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .resource-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(20,184,166,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+            min-width: 0;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .resource-card:hover {
+            box-shadow: 0 8px 32px rgba(20,184,166,0.16);
+            transform: translateY(-4px);
+        }
+        .resource-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .resource-card-content {
+            padding: 1.5rem 1.5rem 1rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .resource-card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+        .resource-card-excerpt {
+            color: #334155;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .resource-card-meta {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #14b8a6;
+            gap: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+        .resource-card-meta .category {
+            background: #e0fdf4;
+            color: #14b8a6;
+            border-radius: 8px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+        .resource-card-meta .author {
+            color: #0f172a;
+        }
+        .resource-card-meta .readtime {
+            color: #64748b;
+        }
+        .resource-card .read-more-btn {
+            margin-top: auto;
+            background: #14b8a6;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 0.6rem 1.4rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+        .resource-card .read-more-btn:hover {
+            background: #0d9488;
+        }
+        /* --- Article Detail Styles --- */
+        .article-detail {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(20,184,166,0.08);
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        .article-detail img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        .article-detail h1 {
+            font-size: 2rem;
+            color: #14b8a6;
+            margin-bottom: 1rem;
+        }
+        .article-detail .meta {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .article-detail .back-btn {
+            background: #14b8a6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+        .article-detail .back-btn:hover {
+            background: #0d9488;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navbar: Always present on every page -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Love Heart Logo">
+            <span class="navbar-title">MindfulConnect</span>
+        </div>
+        <div class="navbar-links">
+            <a href="/">Home</a>
+            <a href="/resources" class="active">Resources</a>
+            <a href="/time-management">Time Management</a>
+        </div>
+        <div class="navbar-signin">
+            {% if user_name %}
+                <span style="color:#14b8a6; font-size:1rem;">
+                    Welcome, <span style="font-weight:500; text-decoration:underline;">{{ user_name }}</span>
+                </span>
+                <span style="display:inline-block; vertical-align:middle; margin-left:8px; border:1px solid #14b8a6; border-radius:50%; padding:2px;">
+                    <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+                </span>
+            {% else %}
+                <button onclick="showAuthModal()">Sign In</button>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container" style="padding-top: 100px;">
+        <!-- Resource page header -->
+        <div class="resources-header">
+            <div class="badge">
+                <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24"><path d="M2 7v13a2 2 0 002 2h14a2 2 0 002-2V7"></path><path d="M16 3v4"></path><path d="M8 3v4"></path></svg>
+                Expert Resources
+            </div>
+            <h2>Knowledge & Support</h2>
+            <p>
+                Discover expert advice, practical strategies, and inspiring stories to support your journey toward healthier digital habits.
+            </p>
+        </div>
+        <!-- Search and filter row -->
+        <form class="resources-search-filter" method="get">
+            <input type="text" name="search" placeholder="Search articles, tips, and resources..." value="{{ request.args.get('search', '') }}">
+            <select name="category">
+                <option value="All">All</option>
+                <option value="Education">Education</option>
+                <option value="Tips">Tips</option>
+                <option value="Strategies">Strategies</option>
+                <option value="Stories">Stories</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+        {% set articles = [
+            {'id': 1, 'title': 'Understanding Social Media Addiction: Signs and Symptoms', 'excerpt': 'Learn to recognize the warning signs of social media addiction and understand its impact on mental health and daily life.', 'author': 'Dr. Sarah Johnson', 'category': 'Education', 'readTime': '5 min', 'image': 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=200&fit=crop', 'featured': True, 'content': '<h2>What is Social Media Addiction?</h2><p>Social media addiction, while not officially recognized as a clinical disorder, shares many characteristics with other behavioral addictions. It involves compulsive use of social media platforms that interferes with daily life, relationships, and well-being.</p><h3>Common Signs and Symptoms</h3><p>Recognizing the signs of social media addiction is the first step toward recovery. Here are some key indicators:</p><ul><li><strong>Compulsive checking:</strong> Constantly checking social media throughout the day, even during inappropriate times</li><li><strong>Withdrawal symptoms:</strong> Feeling anxious, restless, or depressed when unable to access social media</li><li><strong>Loss of time awareness:</strong> Spending much more time on social media than intended</li><li><strong>Neglecting responsibilities:</strong> Ignoring work, school, or personal relationships in favor of social media</li><li><strong>Sleep disruption:</strong> Staying up late or waking up during the night to check social media</li></ul><h4>Emotional Signs:</h4><ul><li><strong>FOMO (Fear of Missing Out):</strong> Constant worry about what others are doing online</li><li><strong>Mood dependence:</strong> Your emotional state heavily depends on social media interactions</li><li><strong>Comparison trap:</strong> Constantly comparing yourself to others on social media</li><li><strong>Validation seeking:</strong> Relying on likes, comments, and shares for self-worth</li></ul><h3>The Impact on Mental Health</h3><p>Research has shown strong correlations between excessive social media use and various mental health issues:</p><blockquote><p>"Studies indicate that heavy social media use is associated with increased rates of anxiety, depression, and sleep disorders, particularly among young adults." - American Psychological Association</p></blockquote><h4>Key Mental Health Impacts:</h4><ul><li><strong>Increased anxiety:</strong> Constant stimulation and comparison can heighten anxiety levels</li><li><strong>Depression symptoms:</strong> Social comparison and isolation can contribute to depressive episodes</li><li><strong>Attention problems:</strong> Constant notifications can fragment attention and reduce focus</li><li><strong>Sleep disorders:</strong> Blue light exposure and mental stimulation can disrupt sleep patterns</li><li><strong>Body image issues:</strong> Exposure to filtered and edited content can negatively impact self-perception</li></ul><h3>When to Seek Help</h3><p>If you recognize several of these signs in yourself or a loved one, it may be time to seek professional help or implement structured changes to social media habits.</p><p>Remember, acknowledging the problem is the first and most important step toward recovery. With awareness and the right strategies, it\'s possible to develop a healthier relationship with social media.</p><h3>Next Steps</h3><p>In our next article, we\'ll explore practical strategies for reducing social media use and building healthier digital habits. Remember, change is a process, and every small step counts toward recovery.</p>'},
+            {'id': 2, 'title': 'The Psychology Behind Social Media Addiction', 'excerpt': 'Explore the neurological and psychological mechanisms that make social media so compelling and addictive.', 'author': 'Dr. Michael Chen', 'category': 'Education', 'readTime': '12 min', 'image': 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop', 'featured': True, 'content': '<h2>Understanding the Addictive Design</h2><p>Social media platforms are designed to be addictive. Understanding the psychological mechanisms at play can help you recognize why these platforms are so compelling and how to resist their pull.</p><h3>The Dopamine Connection</h3><p>Every like, comment, and share triggers a release of dopamine in your brain - the same neurotransmitter involved in gambling and substance addictions. This creates a powerful reward cycle that keeps you coming back for more.</p><h4>Variable Ratio Reinforcement</h4><p>Social media uses what psychologists call "variable ratio reinforcement" - the same principle that makes slot machines so addictive. You never know when you\'ll receive a reward (like, comment, message), which makes the behavior more compulsive.</p><h3>Fear of Missing Out (FOMO)</h3><p>FOMO is a powerful psychological driver that social media exploits. The constant stream of updates creates anxiety about missing important information or social events, keeping you glued to your feeds.</p><h3>Social Comparison Theory</h3><p>Humans naturally compare themselves to others, and social media amplifies this tendency. We\'re constantly exposed to curated highlight reels of others\' lives, leading to feelings of inadequacy and the need to keep checking for validation.</p><h3>The Attention Economy</h3><p>Social media companies profit from your attention. Their algorithms are designed to show you content that will keep you engaged for as long as possible, often prioritizing emotionally charged or controversial content.</p><h4>Key Design Features:</h4><ul><li><strong>Infinite scroll:</strong> No natural stopping point keeps you scrolling indefinitely</li><li><strong>Push notifications:</strong> Constant interruptions create urgency and habit formation</li><li><strong>Social validation metrics:</strong> Likes and shares provide immediate feedback and reward</li><li><strong>Algorithmic feeds:</strong> Personalized content increases relevance and engagement</li></ul><h3>Breaking the Cycle</h3><p>Understanding these mechanisms is the first step to breaking free. Once you recognize how your psychology is being exploited, you can make more conscious choices about your technology use.</p><h4>Strategies for Resistance:</h4><ul><li>Recognize the triggers that lead to compulsive use</li><li>Question the motivation behind your social media use</li><li>Practice mindfulness when using devices</li><li>Set intentional boundaries and stick to them</li><li>Seek real-world connections and validation</li></ul><p>Remember, you\'re not weak for being affected by these powerful psychological tools. They\'re designed by teams of experts specifically to capture and hold your attention. Awareness is your first line of defense.</p>'},
+            {'id': 3, 'title': '10 Practical Tips to Reduce Screen Time', 'excerpt': 'Evidence-based strategies to help you create healthy boundaries with social media platforms and reclaim your time.', 'author': 'Mental Health Team', 'category': 'Tips', 'readTime': '7 min', 'image': 'https://images.unsplash.com/photo-1516387938699-a93567ec168e?w=400&h=200&fit=crop', 'featured': False, 'content': '<h2>Taking Control of Your Digital Life</h2><p>Reducing screen time doesn\'t mean completely eliminating technology from your life. It\'s about creating intentional boundaries that allow you to use technology as a tool rather than being controlled by it.</p><h3>1. Set Clear Intentions</h3><p>Before opening any social media app, ask yourself: "What am I hoping to accomplish?" Having a clear purpose helps prevent mindless scrolling.</p><h3>2. Use App Timers and Limits</h3><p>Most smartphones now have built-in screen time controls. Set daily limits for social media apps and stick to them. When you hit your limit, resist the urge to override it.</p><h3>3. Create Phone-Free Zones</h3><p>Designate certain areas of your home as phone-free zones, such as the bedroom or dining room. This helps create physical boundaries between you and your devices.</p><h3>4. Implement the "Phone in Another Room" Rule</h3><p>When working or studying, keep your phone in a different room. The physical distance creates a barrier that makes impulsive checking less likely.</p><h3>5. Turn Off Non-Essential Notifications</h3><p>Every notification is designed to grab your attention. Turn off notifications for social media apps and only keep essential ones like calls and texts.</p><h3>6. Use Grayscale Mode</h3><p>Making your phone screen black and white can reduce its visual appeal and make you less likely to use it compulsively.</p><h3>7. Schedule Social Media Time</h3><p>Instead of checking social media throughout the day, designate specific times for it. For example, 15 minutes after lunch and 15 minutes in the evening.</p><h3>8. Find Alternative Activities</h3><p>Replace social media time with enriching activities like reading, exercising, cooking, or spending time with loved ones. Have a list ready for when you feel the urge to scroll.</p><h3>9. Use the "One Tab Rule"</h3><p>When using a computer, only have one social media tab open at a time. This prevents endless tab-switching and helps you stay focused.</p><h3>10. Practice Digital Sabbaths</h3><p>Designate one day per week (or even just a few hours) as completely screen-free time. Use this time to connect with yourself and others without digital distractions.</p><h3>Making It Stick</h3><p>Remember, building new habits takes time. Start with one or two strategies and gradually add more as they become routine. Be patient with yourself and celebrate small victories along the way.</p><blockquote><p>"The goal isn\'t to eliminate technology, but to use it intentionally in ways that support your well-being and goals."</p></blockquote>'},
+            {'id': 4, 'title': 'Building Healthy Digital Habits', 'excerpt': 'Step-by-step guide to creating sustainable practices for mindful technology use and digital wellness.', 'author': 'Wellness Coach Lisa', 'category': 'Strategies', 'readTime': '8 min', 'image': 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=400&h=200&fit=crop', 'featured': False, 'content': '<h2>Creating Lasting Change</h2><p>Building healthy digital habits is a process that requires patience, consistency, and self-compassion. This guide will walk you through practical steps to develop a more mindful relationship with technology.</p><h3>Step 1: Assess Your Current Habits</h3><p>Before making changes, it\'s important to understand your current patterns. Use your phone\'s built-in screen time tools to get an honest picture of your usage.</p><h4>Questions to Consider:</h4><ul><li>Which apps do you use most frequently?</li><li>What times of day do you use your phone most?</li><li>What triggers your social media use?</li><li>How does your phone use make you feel?</li></ul><h3>Step 2: Set Clear Intentions</h3><p>Define what healthy technology use looks like for you. Your goals should be specific, measurable, and aligned with your values.</p><h4>Example Goals:</h4><ul><li>"I will check social media only twice per day, for 15 minutes each time"</li><li>"I will not use my phone for the first hour after waking up"</li><li>"I will put my phone away during meals with family"</li></ul><h3>Step 3: Modify Your Environment</h3><p>Make it easier to succeed by changing your physical and digital environment.</p><h4>Physical Changes:</h4><ul><li>Charge your phone outside the bedroom</li><li>Create a designated spot for devices during meals</li><li>Remove devices from your workspace when focusing</li></ul><h4>Digital Changes:</h4><ul><li>Turn off non-essential notifications</li><li>Uninstall problematic apps from your phone</li><li>Use app timers and website blockers</li><li>Organize your home screen to reduce temptation</li></ul><h3>Step 4: Replace Old Habits with New Ones</h3><p>Don\'t just eliminate behaviors - replace them with positive alternatives.</p><h4>Healthy Replacements:</h4><ul><li>Instead of checking your phone when bored, try deep breathing or stretching</li><li>Replace scrolling before bed with reading or journaling</li><li>Use waiting time for mindfulness practice instead of phone checking</li></ul><h3>Step 5: Practice Mindful Technology Use</h3><p>When you do use technology, do it intentionally and mindfully.</p><h4>Mindful Use Strategies:</h4><ul><li>Set a specific purpose before opening an app</li><li>Take three deep breaths before unlocking your phone</li><li>Notice your emotional state before and after using social media</li><li>Practice gratitude for the positive aspects of technology</li></ul><h3>Step 6: Build Support Systems</h3><p>Surround yourself with people who support your digital wellness goals.</p><ul><li>Share your goals with friends and family</li><li>Find an accountability partner</li><li>Join online communities focused on digital wellness</li><li>Consider working with a therapist if needed</li></ul><h3>Step 7: Track Progress and Adjust</h3><p>Regularly review your progress and adjust your strategies as needed. Remember that setbacks are normal and part of the learning process.</p><h4>Weekly Check-ins:</h4><ul><li>Review your screen time data</li><li>Reflect on what\'s working and what isn\'t</li><li>Celebrate small wins</li><li>Adjust strategies based on what you\'ve learned</li></ul><p>Remember, building healthy digital habits is a marathon, not a sprint. Be patient with yourself and focus on progress, not perfection.</p>'},
+        ] %}
+        {% set article_id = request.args.get('id') %}
+        {% if article_id %}
+            {# --- Article Detail View --- #}
+            {% set article = (articles | selectattr('id', 'equalto', article_id | int) | list)[0] %}
+            <div class="article-detail">
+                <button class="back-btn" onclick="window.location.href='/resources'">&larr; Back to Resources</button>
+                <img src="{{ article.image }}" alt="{{ article.title }}">
+                <h1>{{ article.title }}</h1>
+                <div class="meta">By {{ article.author }} | {{ article.category }} | {{ article.readTime }}</div>
+                <div>{{ article.content | safe }}</div>
+            </div>
+        {% else %}
+            <!-- All Resources Section (no featured section) -->
+            <div class="all-resources-section">
+                <div class="all-title">
+                    <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+                    All Resources
+                </div>
+                <div class="all-articles">
+                    {% for article in articles %}
+                        <div class="resource-card" onclick="window.location.href='/resources?id={{ article.id }}'">
+                            <img src="{{ article.image }}" alt="{{ article.title }}">
+                            <div class="resource-card-content">
+                                <div class="resource-card-meta">
+                                    <span class="category">{{ article.category }}</span>
+                                    <span class="author">A. {{ article.author }}</span>
+                                    <span class="readtime">{{ article.readTime }}</span>
+                                </div>
+                                <div class="resource-card-title">{{ article.title }}</div>
+                                <div class="resource-card-excerpt">{{ article.excerpt }}</div>
+                                <button class="read-more-btn" onclick="event.stopPropagation(); window.location.href='/resources?id={{ article.id }}'">Read More</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <!--
+    Code explanation:
+    - The navbar/header is always present at the top for navigation.
+    - The articles are defined as a static list in the template for demo purposes.
+    - The search and category filter use GET parameters to filter articles.
+    - If an article id is present in the URL (?id=...), the detail view is shown.
+    - Otherwise, a list of articles is shown, each card is clickable to open the detail view.
+    - The 'Read More' button also opens the detail view.
+    - All styles are included for clarity and can be moved to style.css if desired.
+    -->
+    <script>
+    // Modal logic for sign in (if you use it)
+    function showAuthModal() {
+        if(document.getElementById('auth-modal-overlay')){
+            document.getElementById('auth-modal-overlay').style.display = 'block';
+            document.getElementById('auth-modal').style.display = 'block';
+            showTab('signin');
+        }
+    }
+    </script>
+</body>
+</html>
