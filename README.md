@@ -122,3 +122,4 @@
 
 # Website Making Stuff
 Note: Certain portions of code are from figma, built in visual studio ai was used to transform the programming language into the correct one. Certain files like menu.html and layout.html for some reason provide no reason now, menu.html has been deprecated, layout.html will be depricated soon. The menu.html and layout.html are not required for the website to operate.
+I got 100 for the lighthouse report (performance), which I believe is pretty good
