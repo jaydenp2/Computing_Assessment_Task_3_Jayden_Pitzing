@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Management | MindfulConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { background: #f6fbfa; }
+        .tm-section { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+        .tm-header { text-align: center; margin-bottom: 2rem; }
+        .tm-header h1 { font-size: 2.2rem; color: #14b8a6; margin-bottom: 0.5rem; }
+        .tm-header p { color: #334155; font-size: 1.1rem; }
+        .tm-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: #e0fdf4; color: #14b8a6; padding: 0.5rem 1.2rem; border-radius: 999px; font-size: 1rem; font-weight: 500; margin-bottom: 1.5rem; }
+        .tm-card { background: #fff; border-radius: 1.2rem; box-shadow: 0 2px 16px rgba(20,184,166,0.08); padding: 2rem 1.5rem; margin-bottom: 2rem; }
+        .tm-card-title { font-size: 1.3rem; color: #0f172a; margin-bottom: 1rem; font-weight: 600; }
+        .tm-btn { background: #14b8a6; color: #fff; border: none; border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 600; cursor: pointer; margin: 0.5rem 0; }
+        .tm-btn-outline { background: #e0fdf4; color: #14b8a6; border: 2px solid #14b8a6; }
+        .tm-features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 2rem; }
+        @media (max-width: 900px) { .tm-features { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 700px) { .tm-features { grid-template-columns: 1fr; } }
+        .tm-feature-card { background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(20,184,166,0.08); padding: 1.2rem; text-align: center; }
+        .tm-feature-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .tm-challenges { margin-bottom: 2rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        @media (max-width: 900px) { .tm-challenges { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 700px) { .tm-challenges { grid-template-columns: 1fr; } }
+        .tm-challenge-card { background: #fef9c3; border-radius: 1rem; padding: 1.2rem; }
+        .tm-challenge-title { font-weight: 600; color: #0f172a; }
+        .tm-challenge-desc { color: #334155; font-size: 0.98rem; margin-bottom: 0.5rem; }
+        .tm-progress-bar { background: #e0fdf4; border-radius: 6px; height: 8px; margin: 0.5rem 0; }
+        .tm-progress { background: #14b8a6; height: 8px; border-radius: 6px; }
+        .tm-challenge-meta { font-size: 0.95rem; color: #334155; margin-bottom: 0.5rem; }
+        .tm-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+        @media (max-width: 700px) { .tm-stats { grid-template-columns: 1fr; } }
+        .tm-stat-card { background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(20,184,166,0.08); padding: 1.2rem; text-align: center; }
+        .tm-stat-title { color: #14b8a6; font-weight: 600; }
+        .tm-stat-value { font-size: 1.5rem; color: #0f172a; font-weight: 700; }
+        .tm-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 2000;
+        }
+        .tm-modal {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2100;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            width: 400px;
+            max-width: 95vw;
+            padding: 2rem;
+        }
+        .tm-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+        .tm-modal h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; }
+        .tm-modal label { display: block; margin-top: 1rem; font-weight: 500; }
+        .tm-modal input { width: 100%; padding: 0.6rem; margin-top: 0.3rem; border-radius: 8px; border: 1px solid #d1fae5; }
+        .tm-modal .tm-btn { width: 100%; margin-top: 1.5rem; }
+        .tm-modal-row { display: flex; align-items: center; justify-content: space-between; margin: 1rem 0; }
+        .tm-modal-row label { margin: 0; }
+        .tm-modal-row .tm-btn { width: auto; margin: 0 0.5rem; padding: 0.4rem 1rem; }
+    </style>
+    <script>
+        // Basic timer functionality for demo
+        let timer = 25 * 60;
+        let timerInterval = null;
+        function updateTimerDisplay() {
+            const mins = Math.floor(timer / 60);
+            const secs = timer % 60;
+            document.getElementById('tm-timer').textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+        function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                if (timer > 0) {
+                    timer--;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+        function pauseTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+        function resetTimer() {
+            pauseTimer();
+            timer = 25 * 60;
+            updateTimerDisplay();
+        }
+        window.onload = updateTimerDisplay;
+
+        // Modal logic
+        function openModal(type) {
+            closeModal(); // Close any open modal first
+            document.getElementById('tm-modal-overlay').style.display = 'block';
+            document.getElementById('tm-modal-' + type).style.display = 'block';
+        }
+        function closeModal() {
+            document.getElementById('tm-modal-overlay').style.display = 'none';
+            var modals = ['limits', 'pomodoro', 'sunset', 'mindful'];
+            modals.forEach(function(type) {
+                var modal = document.getElementById('tm-modal-' + type);
+                if (modal) modal.style.display = 'none';
+            });
+        }
+        document.getElementById('tm-modal-overlay').onclick = closeModal;
+
+        // App limits logic
+        var limits = { instagram: 1, tiktok: 1, twitter: 0.5 };
+        function changeLimit(app, delta) {
+            limits[app] = Math.max(0.5, Math.min(8, limits[app] + delta));
+            document.getElementById('limit-' + app).textContent = limits[app] + 'h';
+        }
+
+        // Toggle join challenge button text
+        function toggleJoin(btn) {
+            if (btn.textContent === "Join Challenge") {
+                btn.textContent = "Joined ✓";
+                btn.classList.remove("tm-btn-outline");
+                btn.classList.add("tm-btn");
+            } else {
+                btn.textContent = "Join Challenge";
+                btn.classList.remove("tm-btn");
+                btn.classList.add("tm-btn-outline");
+            }
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Love Heart Logo">
+            <span class="navbar-title">MindfulConnect</span>
+        </div>
+        <div class="navbar-links">
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/time-management" class="active">Time Management</a>
+        </div>
+        <div class="navbar-signin">
+            {% if user_name %}
+                <span style="color:#14b8a6; font-size:1rem;">
+                    Welcome, <span style="font-weight:500; text-decoration:underline;">{{ user_name }}</span>
+                </span>
+                <span style="display:inline-block; vertical-align:middle; margin-left:8px; border:1px solid #14b8a6; border-radius:50%; padding:2px;">
+                    <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+                </span>
+            {% else %}
+                <button onclick="showAuthModal()">Sign In</button>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="tm-section">
+        <div class="tm-header">
+            <div class="tm-badge">
+                <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"></path></svg>
+                Time Management Tools
+            </div>
+            <h1>Master Your Time</h1>
+            <p>Practical tools and techniques to help you build healthier digital habits and manage your screen time effectively.</p>
+        </div>
+        <div class="tm-card" style="max-width:500px; margin:0 auto;">
+            <div class="tm-card-title">
+                <svg width="24" height="24" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"></path></svg>
+                Pomodoro Timer
+            </div>
+            <div id="tm-timer" style="font-size:2.5rem; color:#14b8a6; font-family:monospace; margin-bottom:0.5rem;">25:00</div>
+            <div style="color:#334155; margin-bottom:1rem;">Focus Time</div>
+            <div style="margin-bottom:1rem;">
+                <button class="tm-btn" style="min-width:90px;" onclick="startTimer()">Start</button>
+                <button class="tm-btn" style="min-width:90px;" onclick="pauseTimer()">Pause</button>
+                <button class="tm-btn tm-btn-outline" style="min-width:90px;" onclick="resetTimer()">Reset</button>
+            </div>
+            <div style="margin-bottom:0.5rem;">
+                <span>Sessions Today</span>
+            </div>
+            <div class="tm-progress-bar">
+                <div class="tm-progress" style="width:0%;"></div>
+            </div>
+            <div style="text-align:right; color:#334155;">0/8</div>
+        </div>
+        <h2 style="color:#14b8a6; font-size:1.3rem; margin-bottom:1rem; margin-top:2.5rem;">
+            <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle; margin-right:8px;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"></path></svg>
+            Time Management Techniques
+        </h2>
+        <div class="tm-features">
+            <div class="tm-feature-card">
+                <div class="tm-feature-icon" style="color:#ef4444;">&#128337;</div>
+                <div class="tm-card-title">Pomodoro Technique</div>
+                <div>Work for 25 minutes, then take a 5-minute break.</div>
+                <button class="tm-btn" style="background:#059669;" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Try Now</button>
+            </div>
+            <div class="tm-feature-card">
+                <div class="tm-feature-icon" style="color:#f59e42;">&#128276;</div>
+                <div class="tm-card-title">Digital Sunset</div>
+                <div>No screens 1 hour before bedtime.</div>
+                <button class="tm-btn" style="background:#ea580c;" onclick="openModal('sunset')">Set Reminder</button>
+            </div>
+            <div class="tm-feature-card">
+                <div class="tm-feature-icon" style="color:#2563eb;">&#128241;</div>
+                <div class="tm-card-title">App Time Limits</div>
+                <div>Set daily usage limits for social media apps.</div>
+                <button class="tm-btn" style="background:#2563eb;" onclick="openModal('limits')">Configure</button>
+            </div>
+            <div class="tm-feature-card">
+                <div class="tm-feature-icon" style="color:#22c55e;">&#10004;</div>
+                <div class="tm-card-title">Mindful Breaks</div>
+                <div>Take conscious breaks every hour.</div>
+                <button class="tm-btn" style="background:#22c55e;" onclick="openModal('mindful')">Start</button>
+            </div>
+        </div>
+        <h2 style="color:#14b8a6; font-size:1.3rem; margin-bottom:1rem; margin-top:2.5rem;">
+            <svg width="20" height="20" fill="none" stroke="#14b8a6" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle; margin-right:8px;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"></path></svg>
+            Weekly Challenges
+        </h2>
+        <div class="tm-challenges">
+            <div class="tm-challenge-card">
+                <div class="tm-challenge-title">7-Day Digital Detox</div>
+                <div class="tm-challenge-meta">1 day left</div>
+                <div class="tm-challenge-desc">Reduce social media usage by 50% this week</div>
+                <div class="tm-progress-bar"><div class="tm-progress" style="width:65%;"></div></div>
+                <div class="tm-challenge-meta">234 participants</div>
+                <button class="tm-btn tm-btn-outline" onclick="toggleJoin(this)">Join Challenge</button>
+            </div>
+            <div class="tm-challenge-card">
+                <div class="tm-challenge-title">Mindful Morning</div>
+                <div class="tm-challenge-meta">2 days left</div>
+                <div class="tm-challenge-desc">No phone for the first hour after waking up</div>
+                <div class="tm-progress-bar"><div class="tm-progress" style="width:85%;"></div></div>
+                <div class="tm-challenge-meta">156 participants</div>
+                <button class="tm-btn tm-btn-outline" onclick="toggleJoin(this)">Join Challenge</button>
+            </div>
+            <div class="tm-challenge-card">
+                <div class="tm-challenge-title">Focus Sprint</div>
+                <div class="tm-challenge-meta">5 days left</div>
+                <div class="tm-challenge-desc">Complete 4 Pomodoro sessions daily</div>
+                <div class="tm-progress-bar"><div class="tm-progress" style="width:40%;"></div></div>
+                <div class="tm-challenge-meta">89 participants</div>
+                <button class="tm-btn tm-btn-outline" onclick="toggleJoin(this)">Join Challenge</button>
+            </div>
+        </div>
+        <div class="tm-stats" style="margin-top:2.5rem;">
+            <div class="tm-stat-card">
+                <div class="tm-stat-title">This Week's Focus</div>
+                <div class="tm-stat-value">0h</div>
+                <div>Total focus time today</div>
+            </div>
+            <div class="tm-stat-card">
+                <div class="tm-stat-title">Techniques Active</div>
+                <div class="tm-stat-value">0</div>
+                <div>Tools currently in use</div>
+            </div>
+            <div class="tm-stat-card">
+                <div class="tm-stat-title">Success Rate</div>
+                <div class="tm-stat-value">0%</div>
+                <div>Daily goal progress</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="tm-modal-overlay" class="tm-modal-overlay"></div>
+
+    <!-- App Time Limits Modal -->
+    <div id="tm-modal-limits" class="tm-modal">
+        <button class="tm-modal-close" onclick="closeModal()">&times;</button>
+        <h2>App Time Limits</h2>
+        <p>Set daily time limits for your social media apps to build healthier habits.</p>
+        <div class="tm-modal-row">
+            <label>Instagram</label>
+            <button class="tm-btn tm-btn-outline" onclick="changeLimit('instagram', -0.5)">-</button>
+            <span id="limit-instagram">1h</span>
+            <button class="tm-btn tm-btn-outline" onclick="changeLimit('instagram', 0.5)">+</button>
+        </div>
+        <div class="tm-modal-row">
+            <label>TikTok</label>
+            <button class="tm-btn tm-btn-outline" onclick="changeLimit('tiktok', -0.5)">-</button>
+            <span id="limit-tiktok">1h</span>
+            <button class="tm-btn tm-btn-outline" onclick="changeLimit('tiktok', 0.5)">+</button>
+        </div>
+        <div class="tm-modal-row">
+            <label>Twitter</label>
+            <button class="tm-btn tm-btn-outline" onclick="changeLimit('twitter', -0.5)">-</button>
+            <span id="limit-twitter">0.5h</span>
+            <button class="tm-btn tm-btn-outline" onclick="changeLimit('twitter', 0.5)">+</button>
+        </div>
+        <button class="tm-btn" style="background:#059669;" onclick="closeModal()">Save Limits</button>
+    </div>
+
+    <!-- Pomodoro Technique Modal -->
+    <div id="tm-modal-pomodoro" class="tm-modal">
+        <button class="tm-modal-close" onclick="closeModal()">&times;</button>
+        <h2>Pomodoro Technique</h2>
+        <p>Work for 25 minutes, then take a 5-minute break. Repeat for better focus!</p>
+        <button class="tm-btn" style="background:#059669;" onclick="closeModal()">Start Pomodoro</button>
+    </div>
+
+    <!-- Digital Sunset Modal -->
+    <div id="tm-modal-sunset" class="tm-modal">
+        <button class="tm-modal-close" onclick="closeModal()">&times;</button>
+        <h2>Digital Sunset</h2>
+        <p>No screens 1 hour before bedtime. Set a reminder:</p>
+        <input type="time" value="21:00" style="width:100%;margin-bottom:1rem;">
+        <button class="tm-btn" style="background:#ea580c;" onclick="closeModal()">Save Reminder</button>
+    </div>
+
+    <!-- Mindful Breaks Modal -->
+    <div id="tm-modal-mindful" class="tm-modal">
+        <button class="tm-modal-close" onclick="closeModal()">&times;</button>
+        <h2>Mindful Breaks</h2>
+        <p>Take conscious breaks every hour. Set interval (minutes):</p>
+        <input type="number" min="5" max="120" value="60" style="width:100%;margin-bottom:1rem;">
+        <button class="tm-btn" style="background:#22c55e;" onclick="closeModal()">Start Mindful Breaks</button>
+    </div>
+</body>
+</html>

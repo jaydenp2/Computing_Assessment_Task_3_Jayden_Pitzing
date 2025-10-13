@@ -52,7 +52,14 @@ def signup():
 
 @app.route('/resources')
 def resources():
-    return render_template('resources.html')
+    user_name = session.get('user_name')
+    return render_template('resources.html', user_name=user_name)
+
+@app.route('/time-management')
+def time_management():
+    user_name = session.get('user_name')
+    # Renders the template as HTML
+    return render_template('time-management.html', user_name=user_name)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
