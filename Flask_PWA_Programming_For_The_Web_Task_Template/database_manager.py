@@ -1,4 +1,5 @@
 import sqlite3 as sql
+import random
 
 def listExtension():
   con = sql.connect("database/data_source.db")
@@ -79,3 +80,21 @@ def get_user_by_email(email):
     if row:
         return {'First_Name': row[0], 'Surname': row[1], 'Email': row[2]}
     return None
+
+def populate_user_timemanagement_with_demo():
+    conn = sqlite3.connect('data_source.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT User_ID FROM User_TimeManagement")
+    user_ids = cursor.fetchall()
+    for (user_id,) in user_ids:
+        pomodoro_sessions = random.randint(0, 12)
+        app_limits = f"Instagram:{random.randint(1,3)}h,TikTok:{random.randint(1,3)}h,Twitter:{random.randint(1,2)}h"
+        reminders = f"Digital Sunset:{random.randint(20,22)}:00"
+        mindful_breaks = f"{random.choice([30, 45, 60, 90])}min"
+        cursor.execute("""
+            UPDATE User_TimeManagement
+            SET PomodoroSessions=?, AppLimits=?, Reminders=?, MindfulBreaks=?
+            WHERE User_ID=?
+        """, (pomodoro_sessions, app_limits, reminders, mindful_breaks, user_id))
+    conn.commit()
+    conn.close()

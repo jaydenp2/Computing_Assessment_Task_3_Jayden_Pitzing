@@ -61,5 +61,10 @@ def time_management():
     # Renders the template as HTML
     return render_template('time-management.html', user_name=user_name)
 
+@app.route('/admin/populate-timemanagement-demo')
+def admin_populate_timemanagement_demo():
+    dbHandler.populate_user_timemanagement_with_demo()
+    return "User_TimeManagement table populated with random demo data."
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
