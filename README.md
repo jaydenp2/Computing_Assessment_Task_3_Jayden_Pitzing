@@ -1,4 +1,3 @@
-
 # COMPUTING ASSESSMENT TASK 3 — JAYDEN PITZING — 2025
 
 ---
@@ -123,3 +122,17 @@
 # Website Making Stuff
 Note: Certain portions of code are from figma, built in visual studio ai was used to transform the programming language into the correct one. Certain files like menu.html and layout.html for some reason provide no reason now, menu.html has been deprecated, layout.html will be depricated soon. The menu.html and layout.html are not required for the website to operate.
 I got 100 for the lighthouse report (performance), which I believe is pretty good
+
+## How to Run the Web Application
+
+1. **Open the project folder in VS Code.**
+2. **Ensure you have Python and Flask installed.**
+   - You can install Flask by running:  
+     `pip install flask`
+3. **Open a terminal in VS Code.**
+4. **Navigate to the project directory if needed.**
+5. **Run the Flask application:**
+   - Use:  
+     `python main.py`
+6. **Follow any additional instructions in `instruction.file` if present.**
+7. **Open your browser and go to** `http://localhost:5000` **to view the site.**
