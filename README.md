@@ -136,3 +136,6 @@ I got 100 for the lighthouse report (performance), which I believe is pretty goo
      `python main.py`
 6. **Follow any additional instructions in `instruction.file` if present.**
 7. **Open your browser and go to** `http://localhost:5000` **to view the site.**
+
+## Acknowledgements
+Github copilot (GPT-4.1): used for debugging and fixing issues for stuff on the website that didn't work.
